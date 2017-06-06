@@ -22,7 +22,7 @@ void setup() {
 }
 
 void loop() {
-  int contador = 9513;
+  int numero = 9513;
   unsigned int digitos[N];
   
   digitos[3] = numero%10;
