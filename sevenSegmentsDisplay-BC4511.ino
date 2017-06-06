@@ -13,23 +13,26 @@ byte bcdCode[10] = {B0000, B0001, B0010, B0011, B0100, B0101, B0110, B0111, B100
 /* Máscara de bits para as entradas do CI */
 byte mask[N] = {B0001, B0010, B0100, B1000};
 
+/* Variavel que armazena dígitos separados de unidade, dezena, centena... */
+unsigned int digitos[N];
+
+/* Variáveis para controlar incremento do contador através do tempo */
+unsigned long tempo;
+int contador = 0;
 
 void setup() {
   for(int i = 0; i < N; i++){
     pinMode(sevenSegmentsDisplays[i], OUTPUT);
     pinMode(bc4511Inputs[i], OUTPUT);
   }
+  tempo = millis();
 }
 
 void loop() {
-  int numero = 9513;
-  unsigned int digitos[N];
-  
-  digitos[3] = numero%10;
-  digitos[2] = (numero/10)%10;
-  digitos[1] = (numero/100)%10;
-  digitos[0] = (numero/1000)%10;
-
+  digitos[3] = contador%10;
+  digitos[2] = (contador/10)%10;
+  digitos[1] = (contador/100)%10;
+  digitos[0] = (contador/1000)%10;
 
     /* Laço para varrer os displays sequencialmente */
     /* Varre da esquerda para direita, começando da dezenaMilhar */
@@ -50,4 +53,10 @@ void loop() {
         digitalWrite(sevenSegmentsDisplays[i], LOW);
     }
 
+    if((millis() - tempo) > 1000){
+      tempo = millis();
+      contador++;
+      if(contador > 9999)
+        contador = 0;
+    }
 }
